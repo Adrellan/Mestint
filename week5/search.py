@@ -98,3 +98,50 @@ def depth_first_graph_search(problem):
         # Verem bővítése amíg benem járt elemekkel
         frontier.extend(child for child in node.expand(problem)
                         if child.state not in explored and child not in frontier)
+
+def best_first_graph_search(problem, f):
+
+    # kezdő állapot létrehozása
+    node = Node(problem.initial)
+
+    # prioritásos (vmilyen heurisztika szerint rendezett) or létrehozása
+    frontier = []
+
+    # kezdő állapot felvétele a prioritásos sorba
+    frontier.append(node)
+
+    # halmaz létrehzása a már megvizsgált elemekhez
+    explored = set()
+
+    # amíg találunk elemet
+    while frontier:
+        # elem kivétele a verem tetejéről
+        node = frontier.pop()
+
+        # ha cél állapotban vagyunk akkor kész
+        if problem.goal_test(node.state):
+            return node
+        
+        # feldolgozott elemek bővítése
+        explored.add(node.state)
+
+        # operátorral legártott gyermek elemek bejárása
+        for child in node.expand(problem):
+            # ha még nem dolgoztuk fel
+            if child.state not in explored and child not in frontier:
+                frontier.append(child)
+        
+        # rendezzük a listát (sort) a heurisztikának megfelelően
+        frontier = f(frontier)
+        print(node.state)
+
+
+
+def astar_search(problem, f=None):
+    """
+    h*(n): az n ből valamel célcsúcsba jutás optimális költsége
+    g*(n): a startcsúcsból n-be jutás optimális költsége
+    f*(n):=g*(n)+h*(n): a startcsúcsból n-en keresztül valamely célcsúcsba
+    """
+
+    return best_first_graph_search(problem, f)
