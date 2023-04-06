@@ -1,7 +1,5 @@
 import numpy as np
 
-
-
 from node import Node
 from problem import Problem
 from collections import deque
